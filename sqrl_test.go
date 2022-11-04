@@ -3,6 +3,7 @@ package sqrl
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -110,7 +111,7 @@ func TestQueryRowWith(t *testing.T) {
 
 func TestWithToSqlErr(t *testing.T) {
 	db := &DBStub{}
-	sqlizer := Select()
+	sqlizer := errSqlizer{}
 
 	_, err := ExecWith(db, sqlizer)
 	assert.Error(t, err)
@@ -120,4 +121,10 @@ func TestWithToSqlErr(t *testing.T) {
 
 	err = QueryRowWith(db, sqlizer).Scan()
 	assert.Error(t, err)
+}
+
+type errSqlizer struct{}
+
+func (errSqlizer) ToSql() (string, []interface{}, error) {
+	return "", nil, errors.New("nope")
 }
