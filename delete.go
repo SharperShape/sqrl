@@ -229,7 +229,7 @@ func (b *DeleteBuilder) UsingSelect(from *SelectBuilder, alias string) *DeleteBu
 
 // Where adds WHERE expressions to the query.
 func (b *DeleteBuilder) Where(pred interface{}, args ...interface{}) *DeleteBuilder {
-	b.whereParts = append(b.whereParts, newWherePart(pred, args...))
+	b.whereParts = append(b.whereParts, NewWherePart(pred, args...))
 	return b
 }
 

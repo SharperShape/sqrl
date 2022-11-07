@@ -96,7 +96,6 @@ func TestSelectBuilderZeroOffsetLimit(t *testing.T) {
 	assert.Equal(t, expectedSql, sql)
 }
 
-
 func TestSelectBuilderFromSelect(t *testing.T) {
 	subQ := Select("c").From("d").Where(Eq{"i": 0})
 	b := Select("a", "b").FromSelect(subQ, "subq")
@@ -108,11 +107,6 @@ func TestSelectBuilderFromSelect(t *testing.T) {
 
 	expectedArgs := []interface{}{0}
 	assert.Equal(t, expectedArgs, args)
-}
-
-func TestSelectBuilderToSqlErr(t *testing.T) {
-	_, _, err := Select().From("x").ToSql()
-	assert.Error(t, err)
 }
 
 func TestSelectBuilderPlaceholders(t *testing.T) {

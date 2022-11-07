@@ -215,16 +215,13 @@ func (b *UpdateBuilder) Set(column string, value interface{}) *UpdateBuilder {
 
 // SetMap is a convenience method which calls .Set for each key/value pair in clauses.
 func (b *UpdateBuilder) SetMap(clauses map[string]interface{}) *UpdateBuilder {
-	keys := make([]string, len(clauses))
-	i := 0
+	keys := make([]string, 0, len(clauses))
 	for key := range clauses {
-		keys[i] = key
-		i++
+		keys = append(keys, key)
 	}
 	sort.Strings(keys)
 	for _, key := range keys {
-		val, _ := clauses[key]
-		b = b.Set(key, val)
+		b.Set(key, clauses[key])
 	}
 	return b
 }
@@ -233,7 +230,7 @@ func (b *UpdateBuilder) SetMap(clauses map[string]interface{}) *UpdateBuilder {
 //
 // See SelectBuilder.Where for more information.
 func (b *UpdateBuilder) Where(pred interface{}, args ...interface{}) *UpdateBuilder {
-	b.whereParts = append(b.whereParts, newWherePart(pred, args...))
+	b.whereParts = append(b.whereParts, NewWherePart(pred, args...))
 	return b
 }
 
