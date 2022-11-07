@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"sort"
 	"strings"
 )
 
@@ -266,15 +267,32 @@ func (b *InsertBuilder) SetMap(clauses map[string]interface{}) *InsertBuilder {
 	// TODO: replace resetting previous values with extending existing ones?
 	cols := make([]string, 0, len(clauses))
 	vals := make([]interface{}, 0, len(clauses))
-
 	for col, val := range clauses {
 		cols = append(cols, col)
 		vals = append(vals, val)
 	}
-
+	sort.Sort(clauseSlice{cols, vals})
 	b.columns = cols
 	b.values = [][]interface{}{vals}
 	return b
+}
+
+type clauseSlice struct {
+	cols []string
+	vals []interface{}
+}
+
+func (x clauseSlice) Len() int {
+	return len(x.cols)
+}
+
+func (x clauseSlice) Less(i, j int) bool {
+	return x.cols[i] < x.cols[j]
+}
+
+func (x clauseSlice) Swap(i, j int) {
+	x.cols[i], x.cols[j] = x.cols[j], x.cols[i]
+	x.vals[i], x.vals[j] = x.vals[j], x.vals[i]
 }
 
 // Select set Select clause for insert query
