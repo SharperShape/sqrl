@@ -286,7 +286,7 @@ func (b *SelectBuilder) RightJoin(join string, rest ...interface{}) *SelectBuild
 //
 // Where will panic if pred isn't any of the above types.
 func (b *SelectBuilder) Where(pred interface{}, args ...interface{}) *SelectBuilder {
-	b.whereParts = append(b.whereParts, newWherePart(pred, args...))
+	b.whereParts = append(b.whereParts, NewWherePart(pred, args...))
 	return b
 }
 
@@ -300,7 +300,7 @@ func (b *SelectBuilder) GroupBy(groupBys ...string) *SelectBuilder {
 //
 // See Where.
 func (b *SelectBuilder) Having(pred interface{}, rest ...interface{}) *SelectBuilder {
-	b.havingParts = append(b.havingParts, newWherePart(pred, rest...))
+	b.havingParts = append(b.havingParts, NewWherePart(pred, rest...))
 	return b
 }
 

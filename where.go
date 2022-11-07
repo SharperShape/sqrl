@@ -2,13 +2,21 @@ package sqrl
 
 import "fmt"
 
-type wherePart part
+type WherePart part
 
-func newWherePart(pred interface{}, args ...interface{}) Sqlizer {
-	return &wherePart{pred: pred, args: args}
+func NewWherePart(pred interface{}, args ...interface{}) Sqlizer {
+	return &WherePart{pred: pred, args: args}
 }
 
-func (p wherePart) ToSql() (sql string, args []interface{}, err error) {
+func (p WherePart) Pred() interface{} {
+	return p.pred
+}
+
+func (p WherePart) Args() []interface{} {
+	return p.args
+}
+
+func (p WherePart) ToSql() (sql string, args []interface{}, err error) {
 	switch pred := p.pred.(type) {
 	case nil:
 		// no-op

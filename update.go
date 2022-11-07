@@ -230,7 +230,7 @@ func (b *UpdateBuilder) SetMap(clauses map[string]interface{}) *UpdateBuilder {
 //
 // See SelectBuilder.Where for more information.
 func (b *UpdateBuilder) Where(pred interface{}, args ...interface{}) *UpdateBuilder {
-	b.whereParts = append(b.whereParts, newWherePart(pred, args...))
+	b.whereParts = append(b.whereParts, NewWherePart(pred, args...))
 	return b
 }
 
