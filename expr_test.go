@@ -19,6 +19,19 @@ func TestEqToSql(t *testing.T) {
 	assert.Equal(t, expectedArgs, args)
 }
 
+func TestEqToSqlDeterministicOrder(t *testing.T) {
+	// test deterministic order
+	b := Eq{"d": 1, "c": nil, "a": 3, "b": 4}
+	sql, args, err := b.ToSql()
+	assert.NoError(t, err)
+
+	expectedSql := "a = ? AND b = ? AND c IS NULL AND d = ?"
+	assert.Equal(t, expectedSql, sql)
+
+	expectedArgs := []interface{}{3, 4, 1}
+	assert.Equal(t, expectedArgs, args)
+}
+
 func TestEqInToSql(t *testing.T) {
 	b := Eq{"id": []int{1, 2, 3}}
 	sql, args, err := b.ToSql()
@@ -100,6 +113,18 @@ func TestLtToSql(t *testing.T) {
 	assert.Equal(t, expectedSql, sql)
 
 	expectedArgs := []interface{}{1}
+	assert.Equal(t, expectedArgs, args)
+}
+
+func TestLtToSqlDeterministicOrder(t *testing.T) {
+	b := Lt{"d": 1, "c": 2, "a": 3, "b": 4}
+	sql, args, err := b.ToSql()
+	assert.NoError(t, err)
+
+	expectedSql := "a < ? AND b < ? AND c < ? AND d < ?"
+	assert.Equal(t, expectedSql, sql)
+
+	expectedArgs := []interface{}{3, 4, 2, 1}
 	assert.Equal(t, expectedArgs, args)
 }
 

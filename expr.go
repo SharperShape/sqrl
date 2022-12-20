@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"reflect"
+	"sort"
 	"strings"
 )
 
@@ -115,7 +116,13 @@ func (eq Eq) toSql(useNotOpr bool) (sql string, args []interface{}, err error) {
 		inEmptyExpr = "(1=1)" // Portable TRUE
 	}
 
-	for key, val := range eq {
+	keys := make([]string, 0, len(eq))
+	for key := range eq {
+		keys = append(keys, key)
+	}
+	sort.Strings(keys)
+	for _, key := range keys {
+		val := eq[key]
 		expr := ""
 
 		switch v := val.(type) {
@@ -186,7 +193,13 @@ func (lt Lt) toSql(opposite, orEq bool) (sql string, args []interface{}, err err
 		opr = fmt.Sprintf("%s%s", opr, "=")
 	}
 
-	for key, val := range lt {
+	keys := make([]string, 0, len(lt))
+	for key := range lt {
+		keys = append(keys, key)
+	}
+	sort.Strings(keys)
+	for _, key := range keys {
+		val := lt[key]
 		expr := ""
 
 		switch v := val.(type) {
